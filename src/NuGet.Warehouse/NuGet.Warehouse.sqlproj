@@ -84,5 +84,6 @@
     <Build Include="dbo\Stored Procedures\RefreshUserAgents.sql" />
     <Build Include="dbo\Stored Procedures\AddDownloadFact.sql" />
     <Build Include="dbo\Stored Procedures\PopulateFixedDimensions.sql" />
+    <Build Include="dbo\Stored Procedures\RebuildIndexes.sql" />
   </ItemGroup>
 </Project>
