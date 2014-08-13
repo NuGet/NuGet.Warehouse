@@ -221,13 +221,15 @@ END
 
 
 DELETE [dbo].[Dimension_Operation]
+INSERT [dbo].[Dimension_Operation] VALUES ( '(unknown)' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Install' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Update' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Restore' )
-INSERT [dbo].[Dimension_Operation] VALUES ( '(unknown)' )
+INSERT [dbo].[Dimension_Operation] VALUES ( 'Reinstall' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Install-Dependency' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Update-Dependency' )
 INSERT [dbo].[Dimension_Operation] VALUES ( 'Restore-Dependency' )
+INSERT [dbo].[Dimension_Operation] VALUES ( 'Reinstall-Dependency' )
 
 
 DELETE [dbo].[Dimension_Project]
