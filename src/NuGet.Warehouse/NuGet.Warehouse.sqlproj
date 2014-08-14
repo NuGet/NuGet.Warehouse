@@ -85,5 +85,6 @@
     <Build Include="dbo\Stored Procedures\AddDownloadFact.sql" />
     <Build Include="dbo\Stored Procedures\PopulateFixedDimensions.sql" />
     <Build Include="dbo\Stored Procedures\RebuildIndexes.sql" />
+    <Build Include="dbo\Stored Procedures\GetIndexFragmentation.sql" />
   </ItemGroup>
 </Project>

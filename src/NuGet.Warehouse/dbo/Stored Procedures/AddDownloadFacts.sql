@@ -59,7 +59,7 @@ AS
         ,   PackageDescription = IsNull(Fact.value('(packageDescription)[1]', 'nvarchar(MAX)'), '')
         ,   PackageIconUrl = IsNull(Fact.value('(packageIconUrl)[1]', 'nvarchar(MAX)'), '')
         ,   DownloadUserAgent = IsNull(Fact.value('(downloadUserAgent)[1]', 'nvarchar(MAX)'), '')
-        ,   DownloadOperation = IsNull(Fact.value('(downloadOperation)[1]', 'nvarchar(18)'), '')
+        ,   DownloadOperation = IsNull(Fact.value('(downloadOperation)[1]', 'nvarchar(32)'), '')
         ,   DownloadTimestamp = Fact.value('(downloadTimestamp)[1]', 'datetime')
         ,   DownloadProjectTypes = IsNull(Fact.value('(downloadProjectTypes)[1]', 'nvarchar(MAX)'), '')
         ,   DownloadDependentPackageId = IsNull(Fact.value('(downloadDependentPackageId)[1]', 'nvarchar(128)'), '')
