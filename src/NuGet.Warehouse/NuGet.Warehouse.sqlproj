@@ -82,9 +82,14 @@
     <Build Include="dbo\Stored Procedures\GetPackagesForExport.sql" />
     <Build Include="dbo\Stored Procedures\AddDownloadFacts.sql" />
     <Build Include="dbo\Stored Procedures\RefreshUserAgents.sql" />
-    <Build Include="dbo\Stored Procedures\AddDownloadFact.sql" />
     <Build Include="dbo\Stored Procedures\PopulateFixedDimensions.sql" />
     <Build Include="dbo\Stored Procedures\RebuildIndexes.sql" />
     <Build Include="dbo\Stored Procedures\GetIndexFragmentation.sql" />
+    <Build Include="dbo\Stored Procedures\ClearDownloadFacts.sql" />
+    <Build Include="dbo\Stored Procedures\GetTimeWindowToProcess.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuGet.Warehouse.publish.xml" />
+    <None Include="NuGet.Warehouse_2014-09-07.publish.xml" />
   </ItemGroup>
 </Project>
