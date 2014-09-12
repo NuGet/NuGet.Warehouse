@@ -1,7 +1,9 @@
 ﻿
 CREATE PROCEDURE [dbo].[AddDownloadFacts]
 	@Facts XML
-,	@MaxOriginalKey INT OUTPUT
+,	@CursorMinTimestamp DATETIME
+,	@CursorMaxTimestamp DATETIME
+,	@Cursor INT
 AS
 
 -- Fetch the '(unknown)' Operation to be used for unknown operations
@@ -346,9 +348,11 @@ BEGIN TRY
 		--		,	deleted.DirtyCount AS '(Old DirtyCount)'
 		;
 
-		-- Get the output value for the max original key that was replicated
-		SELECT		@MaxOriginalKey = MAX(MaxOriginalKey)
-		FROM		@FactsTable
+		-- Update the cursor
+		UPDATE		CollectorCursor
+		SET			[Cursor] = @Cursor
+		WHERE		MinTimestamp = @CursorMinTimestamp
+				AND	MaxTimestamp = @CursorMaxTimestamp
 
 	COMMIT TRANSACTION
 END TRY

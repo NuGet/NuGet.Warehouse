@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[GetTimeWindowToProcess]
+﻿CREATE PROCEDURE [dbo].[CreateCursor]
 	@MinTimestamp SMALLDATETIME OUTPUT -- Note that these have to be a SMALL date time
 ,	@MaxTimestamp SMALLDATETIME OUTPUT -- to make sure we don't have sub-second ticks.
 AS                                     -- That subtle difference would make us miss data!
 
 SELECT		@MinTimestamp = MIN([DateTime])
-		,	@MaxTimestamp = DATEADD(HOUR, 1, MAX([DateTime])) -- Add one hour to close the time window to be processed
+		,	@MaxTimestamp = MAX([DateTime])
 FROM		(
 			SELECT		[DateTime] = CAST(CAST([Date] AS VARCHAR(10)) + ' ' + CAST(HourOfDay AS VARCHAR(2)) + ':00' AS DATETIME)
 					,	Dimension_Date.Id AS Dimension_Date_Id
@@ -20,5 +20,9 @@ WHERE		[DateTime] >= @MinTimestamp
 				WHERE		Fact_Download.Dimension_Date_Id = DateTimeRange.Dimension_Date_Id
 						AND	Fact_Download.Dimension_Time_Id = DateTimeRange.Dimension_Time_Id
 			)
+
+-- Create the cursor record (which will fail if there's an exsting, overlapping cursor)
+INSERT		CollectorCursor (MinTimestamp, MaxTimestamp)
+SELECT		@MinTimestamp, @MaxTimestamp
 
 RETURN 0

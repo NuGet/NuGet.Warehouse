@@ -3,7 +3,8 @@
 ,	@MaxTimestamp DATETIME
 AS
 
-DELETE		Fact_Download
+DELETE		TOP (5000)
+			Fact_Download
 FROM		Fact_Download
 INNER JOIN	(
 			SELECT		Dimension_Date.Id AS Dimension_Date_Id
