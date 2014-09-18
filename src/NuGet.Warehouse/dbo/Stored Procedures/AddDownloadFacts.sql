@@ -1,26 +1,10 @@
 ﻿
 CREATE PROCEDURE [dbo].[AddDownloadFacts]
 	@Facts XML
-,	@ExpectedLastOriginalKey int = 0
+,	@CursorMinTimestamp DATETIME
+,	@CursorMaxTimestamp DATETIME
+,	@Cursor INT
 AS
-
--- Select and lock the Replication Marker (blocking another entrance)
-DECLARE		@LastOriginalKey INT
-		,	@MaxOriginalKey INT
-
-SELECT		@LastOriginalKey = LastOriginalKey
-FROM		ReplicationMarker WITH (TABLOCKX) -- Note: Not just TABLOCK - http://technet.microsoft.com/en-us/library/aa213026(v=SQL.80).aspx
-
--- Guard against there being no replication marker
-SELECT		@LastOriginalKey = IsNull(@LastOriginalKey, 0)
-
-IF @LastOriginalKey <> @ExpectedLastOriginalKey BEGIN
-	RAISERROR ('LastOriginalKey has changed unexpectedly. Expected: %i; Actual: %i', -- Message text.
-				10, -- Severity.
-				1, -- State.
-				@ExpectedLastOriginalKey, -- First argument, formated as a number with %i
-				@LastOriginalKey) -- Second argument, formatted as a number with %i
-END	
 
 -- Fetch the '(unknown)' Operation to be used for unknown operations
 DECLARE		@Unknown varchar(9) = '(unknown)'
@@ -92,38 +76,6 @@ SELECT		PackageId
 		,	DownloadDependentPackageId
 		,	OriginalKey
 FROM		FactsData
--- Ensure we ignore keys already replicated
-WHERE		OriginalKey > @LastOriginalKey
-
--- Get the max original key from the input data
-SELECT		@MaxOriginalKey = MAX(OriginalKey)
-FROM		@FactsInput
-
--- If there's no new data, then abort
-IF @MaxOriginalKey IS NULL OR @MaxOriginalKey < @LastOriginalKey BEGIN
-	RETURN 0
-END
-
-IF (NOT EXISTS(SELECT * FROM ReplicationMarker)) BEGIN
-	INSERT		ReplicationMarker (LastOriginalKey)
-	VALUES		(@MaxOriginalKey)
-END ELSE BEGIN
-	-- Double check that no one else has entered
-	SELECT		@LastOriginalKey = LastOriginalKey
-	FROM		ReplicationMarker
-
-	IF @LastOriginalKey <> @ExpectedLastOriginalKey BEGIN
-		RAISERROR ('LastOriginalKey has changed unexpectedly, after parsing the XML input. Expected: %i; Actual: %i', -- Message text.
-				   10, -- Severity.
-				   1, -- State.
-				   @ExpectedLastOriginalKey, -- First argument, formated as a number with %i
-				   @LastOriginalKey) -- Second argument, formatted as a number with %i
-	END	
-
-	UPDATE		ReplicationMarker
-	SET			LastOriginalKey = @MaxOriginalKey
-	WHERE		LastOriginalKey = @ExpectedLastOriginalKey
-END
 
 -- Group the facts by all the dimensions, with the max original key and sum download count
 -- We can bring in the fixed dimensions: Operation, Date, and Time
@@ -395,6 +347,12 @@ BEGIN TRY
 		--		,	inserted.DirtyCount
 		--		,	deleted.DirtyCount AS '(Old DirtyCount)'
 		;
+
+		-- Update the cursor
+		UPDATE		CollectorCursor
+		SET			[Cursor] = @Cursor
+		WHERE		MinTimestamp = @CursorMinTimestamp
+				AND	MaxTimestamp = @CursorMaxTimestamp
 
 	COMMIT TRANSACTION
 END TRY
