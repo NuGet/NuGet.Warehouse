@@ -24,6 +24,9 @@ BEGIN
         OR	CHARINDEX('NuGet Package Explorer/', @value) > 0
 		)
         
+        -- NOTE that it is assumed that the User Agent string from NuGet clients will always have the major and minor version
+        -- Parsing logic below gets the major version from between the '/' and the first dot after the '/'
+        -- If there is no minor version (i.e, no dot in the client version, the following method will throw)
         RETURN CAST(SUBSTRING(
             @value, 
             CHARINDEX('/', @value) + 1,

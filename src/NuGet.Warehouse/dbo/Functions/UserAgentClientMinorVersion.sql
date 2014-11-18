@@ -25,11 +25,17 @@ BEGIN
         OR	CHARINDEX('NuGet Package Explorer/', @value) > 0
 		)
 
+	BEGIN
+        -- The following 'IF' condition truncates OS information that may be present at the end of the User Agent string inside braces
+        -- OS information may have version information. So, truncating that out helps in a simplified and accurate parsing of UserAgent client minor version
+        -- NOTE that, despite truncating OS information, it is assumed that the User Agent string from NuGet clients will always have the major and minor version
+        IF  (CHARINDEX('(', @value) != 0) SET	@value = SUBSTRING(@value, 0, CHARINDEX('(', @value))
         RETURN CAST(SUBSTRING(
                 @value, 
                 CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1, 
                 (CHARINDEX('.', CONCAT(@value, '.'), CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1)) - ((CHARINDEX('.', @value, CHARINDEX('/', @value) + 1)) + 1)
             ) AS INT)
+	END
 
     RETURN 0
 END
