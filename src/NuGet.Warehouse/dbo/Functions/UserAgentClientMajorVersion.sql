@@ -29,7 +29,10 @@ BEGIN
         -- If there is no minor version (i.e, no dot in the client version, the following method will throw)
         RETURN CAST(SUBSTRING(
             @value, 
+            -- Start 1 character after the /
             CHARINDEX('/', @value) + 1,
+            -- To determine string length, subtract (position of first slash, determined as above) from
+            -- (Position of first dot occuring after first slash)
             CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) - (CHARINDEX('/', @value) + 1)
         ) AS INT)
 

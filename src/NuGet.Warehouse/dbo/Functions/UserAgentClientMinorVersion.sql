@@ -32,10 +32,18 @@ BEGIN
         IF  (CHARINDEX('(', @value) != 0) SET	@value = SUBSTRING(@value, 0, CHARINDEX('(', @value))
         RETURN CAST(SUBSTRING(
                 @value, 
+                -- Start 1 character after the first dot after the /
                 CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1, 
-                (CHARINDEX('.', CONCAT(@value, '.'), CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1)) - ((CHARINDEX('.', @value, CHARINDEX('/', @value) + 1)) + 1)
+                -- And determine our string length
+                (
+                    -- CONCAT: Add a dot to the end to make sure we can find a dot
+                    -- Find the position of the next dot, starting 1 character after the first dot after the / (like we did above)
+                    CHARINDEX('.', CONCAT(@value, '.'), CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1))
+                    -- And now subtract the starting point we used to get the length of the string
+                    - ((CHARINDEX('.', @value, CHARINDEX('/', @value) + 1)) + 1
+                )
             ) AS INT)
-	END
+    END
 
     RETURN 0
 END
