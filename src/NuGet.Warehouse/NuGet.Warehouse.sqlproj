@@ -88,8 +88,7 @@
     <Build Include="dbo\Tables\CollectorCursor.sql" />
     <Build Include="dbo\Functions\OverlappingCursorExists.sql" />
     <Build Include="dbo\Stored Procedures\GetCursor.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="NuGet.Warehouse.refactorlog" />
+    <Build Include="dbo\Tables\CollectorGap.sql" />
+    <Build Include="dbo\Functions\OverlappingGapExists.sql" />
   </ItemGroup>
 </Project>
