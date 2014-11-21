@@ -40,6 +40,12 @@ WHERE		[DateTime] >= @MinTimestamp
 				WHERE		Fact_Download.Dimension_Date_Id = DateTimeRange.Dimension_Date_Id
 						AND	Fact_Download.Dimension_Time_Id = DateTimeRange.Dimension_Time_Id
 			)
+		AND	NOT EXISTS(
+				SELECT		*
+				FROM		CollectorGap
+				WHERE		[DateTime] >= CollectorGap.MinTimestamp
+						AND	[DateTime] < CollectorGap.MaxTimestamp
+			)
 -- If we have a window to process, create the cursor record (which will fail if there's an exsting, overlapping cursor)
 IF @MinTimestamp IS NOT NULL AND @MaxTimestamp IS NOT NULL BEGIN
 	INSERT		CollectorCursor (MinTimestamp, MaxTimestamp)
