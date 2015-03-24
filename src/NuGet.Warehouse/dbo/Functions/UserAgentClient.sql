@@ -60,6 +60,11 @@ BEGIN
 	-- Refer to www.inedo.com for details
     IF CHARINDEX('ProGet/', @value) > 0 
         RETURN 'Inedo ProGet'        
+		
+	-- Refer to http://fsprojects.github.io/Paket/
+	-- Paket 0.x doesn't send a version at all, so be sure to omit the /
+    IF CHARINDEX('Paket', @value) > 0
+        RETURN 'Paket'
     
     RETURN 'Other'
 END
