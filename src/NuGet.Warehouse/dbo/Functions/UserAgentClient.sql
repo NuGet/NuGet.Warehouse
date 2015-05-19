@@ -61,6 +61,14 @@ BEGIN
     IF CHARINDEX('ProGet/', @value) > 0
         RETURN 'Inedo ProGet'
 
+		-- Refer to xamarin.com for details
+    IF CHARINDEX('Xamarin', @value) > 0
+        RETURN 'Xamarin'
+
+	-- Refer to www.monodevelop.com for details
+    IF CHARINDEX('MonoDevelop', @value) > 0
+        RETURN 'MonoDevelop'
+
 	-- Refer to http://fsprojects.github.io/Paket/
 	-- Paket 0.x doesn't send a version at all, so be sure to omit the /
     IF CHARINDEX('Paket', @value) > 0
