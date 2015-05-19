@@ -92,7 +92,7 @@ BEGIN
 /*37*/	,'(Unknown)')
 
     SET IDENTITY_INSERT [dbo].[Dimension_Date] OFF
-    
+
 END
 
 SET XACT_ABORT ON
@@ -101,14 +101,14 @@ DECLARE @Date DATE, @EndDate DATE
 SET @Date = '2010-01-01'
 SET @EndDate = '2020-12-31'
 
-IF (SELECT COUNT(*) FROM [dbo].[Dimension_Date] WHERE Id <> -1) = 0 
+IF (SELECT COUNT(*) FROM [dbo].[Dimension_Date] WHERE Id <> -1) = 0
 BEGIN
 
     DECLARE @FYDays INT, @FYWeek INT, @FYMonth INT, @FYQuarter INT, @FYYear INT, @FYStartDate DATETIME
-     
+
     WHILE @Date <= @EndDate
     BEGIN
-        SET @FYStartDate = '7/1/' + 
+        SET @FYStartDate = '7/1/' +
             CASE WHEN DATEPART(MONTH, @date) < 7 THEN CAST(DATEPART(YEAR, @date) - 1 AS NVARCHAR(4))
             ELSE CAST(DATEPART(YEAR, @date) AS NVARCHAR(4))
         END
@@ -123,14 +123,14 @@ BEGIN
         END
         SET @FYYear = DATEPART(YEAR, @FYStartDate) + 1
 
-        INSERT INTO [dbo].[Dimension_Date] ( 
+        INSERT INTO [dbo].[Dimension_Date] (
             [Date]
             ,[DateName]
             ,[DayOfWeek]
             ,[DayOfWeekName]
             ,[MonthName]
             ,[WeekdayIndicator]
--- CY			
+-- CY
             ,[DayOfYear]
             ,[WeekOfYear]
             ,[WeekOfYearName]
@@ -146,7 +146,7 @@ BEGIN
             ,[HalfYearNameInYear]
             ,[Year]
             ,[YearName]
--- FY			
+-- FY
             ,[FiscalDayOfYear]
             ,[FiscalWeekOfYear]
             ,[FiscalWeekOfYearName]
@@ -170,7 +170,7 @@ BEGIN
             ,DATENAME(WEEKDAY, @date)
             ,DATENAME(month, @date)
             ,CASE WHEN DATEPART(WEEKDAY, @date) > 1 AND DATEPART(WEEKDAY, @date) < 7 THEN 'Weekday' ELSE 'Weekend' END
--- CY			
+-- CY
             ,DATEPART(DAYOFYEAR, @date)
             ,DATEPART(WEEK, @date)
             ,'Week ' + CAST(DATEPART(WEEK, @date) AS NVARCHAR(2))
@@ -186,7 +186,7 @@ BEGIN
             ,'CY ' + DATENAME(YEAR, @date) + '-' + 'H' + CAST(CASE WHEN DATEPART(MONTH, @date) < 7 THEN 1 ELSE 2 END AS NVARCHAR(1))
             ,DATEPART(YEAR, @date)
             ,'CY ' + DATENAME(YEAR, @date)
--- FY			
+-- FY
             ,@FYDays
             ,@FYWeek
             ,'Week ' + CAST(@FYWeek AS NVARCHAR(2))
@@ -203,7 +203,7 @@ BEGIN
             ,@FYYear
             ,'FY ' + CAST(@FYYear AS NVARCHAR(4))
         )
-                   
+
         SET @Date = DATEADD(d, 1, @Date)
     END
 END

@@ -313,7 +313,7 @@ BEGIN TRY
 					)
 		WHEN MATCHED
 					THEN UPDATE SET Fact_Download.DownloadCount = Fact_Download.DownloadCount + FactSource.DownloadCount
-						
+
 		WHEN NOT MATCHED
 					THEN INSERT (Dimension_UserAgent_Id, Dimension_Package_Id, Dimension_Date_Id, Dimension_Time_Id, Dimension_Operation_Id, Dimension_Project_Id, DownloadCount)
 						 VALUES (
@@ -363,7 +363,7 @@ BEGIN CATCH
     DECLARE @ErrorSeverity INT;
     DECLARE @ErrorState INT;
 
-    SELECT 
+    SELECT
         @ErrorMessage = ERROR_MESSAGE(),
         @ErrorSeverity = ERROR_SEVERITY(),
         @ErrorState = ERROR_STATE();

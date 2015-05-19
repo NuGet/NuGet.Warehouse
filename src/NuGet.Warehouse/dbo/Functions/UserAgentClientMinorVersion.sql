@@ -31,9 +31,9 @@ BEGIN
         -- NOTE that, despite truncating OS information, it is assumed that the User Agent string from NuGet clients will always have the major and minor version
         IF  (CHARINDEX('(', @value) != 0) SET	@value = SUBSTRING(@value, 0, CHARINDEX('(', @value))
         RETURN CAST(SUBSTRING(
-                @value, 
+                @value,
                 -- Start 1 character after the first dot after the /
-                CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1, 
+                CHARINDEX('.', @value, CHARINDEX('/', @value) + 1) + 1,
                 -- And determine our string length
                 (
                     -- CONCAT: Add a dot to the end to make sure we can find a dot
