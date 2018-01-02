@@ -74,5 +74,9 @@ BEGIN
     IF CHARINDEX('Paket', @value) > 0
         RETURN 'Paket'
 
+	-- Refer to https://cakebuild.net for details
+    IF CHARINDEX('Cake', @value) > 0
+        RETURN 'Cake'
+
     RETURN 'Other'
 END
