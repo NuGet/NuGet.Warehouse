@@ -1,5 +1,7 @@
 # NuGet.Warehouse
 
+**This repository has been made obsolete in favor of [NuGet/NuGet.Jobs](https://github.com/NuGet/NuGet.Jobs).**
+
 This repo contains NuGet's data warehouse for NuGet Gallery package downloads.
 
 ## Open Source Code of Conduct
